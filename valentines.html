@@ -5,8 +5,9 @@
   <title>Valentine?</title>
   <style>
     body {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #ff758c, #ff7eb3);
@@ -15,12 +16,19 @@
       text-align: center;
     }
 
+    .top-image {
+      max-width: 520px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
     .card {
       background: rgba(255, 255, 255, 0.15);
-      padding: 40px;
+      padding: 10px;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      max-width: 420px;
     }
 
     h1 {
@@ -28,9 +36,16 @@
       font-size: 2.2rem;
     }
 
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
     button {
       padding: 12px 28px;
-      margin: 10px;
       font-size: 1.1rem;
       border: none;
       border-radius: 30px;
@@ -38,25 +53,18 @@
       background: white;
       color: #ff4d6d;
       font-weight: bold;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.3s ease;
+      min-width: 120px;
     }
 
     button:hover {
-      transform: scale(1.08);
       box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
-    }
-
-    img {
-      max-width: 300px;
-      border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-      animation: popIn 0.6s ease forwards;
     }
 
     @keyframes popIn {
       from {
         opacity: 0;
-        transform: scale(0.8);
+        transform: scale(0.85);
       }
       to {
         opacity: 1;
@@ -66,20 +74,79 @@
   </style>
 </head>
 <body>
+
+  <!-- Image ABOVE the card -->
+  <img
+    src="Valentinesdaypicture.jpeg"
+    alt="Valentine Preview"
+    class="top-image"
+  />
+
   <div class="card" id="card">
     <h1>Will you be my Valentine? 💕</h1>
-    <button onclick="showGif()">Yes</button>
-    <button onclick="showGif()">Yes</button>
+
+    <div class="buttons">
+      <button id="yesBtn" onclick="showGif()">Yes</button>
+      <button id="noBtn" onclick="handleNo()">No</button>
+    </div>
   </div>
 
   <script>
+    let noCount = 0;
+
+    const noTexts = [
+      "Are you sure?",
+      "Really sure?",
+      "Are you absolutely sure?",
+      "Think again!",
+      "Don't be shy!",
+      "Last chance 😳", 
+      ""
+    ];
+
     function showGif() {
-      const card = document.getElementById("card");
-      card.innerHTML = `
-        <h1>It’s a date 💖</h1>
-        <img src="valentinesdayGIf.gif" alt="Valentine GIF">
+      document.body.innerHTML = `
+        <div style="
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: linear-gradient(135deg, #ff758c, #ff7eb3);
+          font-family: 'Segoe UI', Tahoma, sans-serif;
+          color: white;
+          text-align: center;
+        ">
+          <h1>It’s a date 💖</h1>
+          <img src="valentinesdayGIf.gif" alt="Valentine GIF" style="
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            animation: popIn 0.6s ease forwards;
+          ">
+        </div>
       `;
+    }
+
+    function handleNo() {
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
+
+      if (noCount < noTexts.length) {
+        noBtn.textContent = noTexts[noCount];
+
+        yesBtn.style.padding = `${12 + noCount * 8}px ${28 + noCount * 16}px`;
+        yesBtn.style.fontSize = `${1.1 + noCount * 0.25}rem`;
+
+        noCount++;
+        if (noCount === noTexts.length) {
+            setTimeout(() => {
+            noBtn.remove();
+            }, 40);
+        }
+      }
     }
   </script>
 </body>
 </html>
+
